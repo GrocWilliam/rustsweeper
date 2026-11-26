@@ -77,15 +77,14 @@ impl Board {
     }
 
     fn get_coor_from_index(&self, index: usize) -> (usize, usize) {
-        let x = index % (self.width + 1);
-        let y = (index / self.width + 1) as usize;
+        let x = index % self.width;
+        let y = index.div_euclid(self.width);
 
         (x, y)
     }
 
     fn count_neightbors_mined(&self, index: usize) -> u8 {
         let (x, y) = self.get_coor_from_index(index);
-
         let mut mined_neightbors_count: u8 = 0;
 
         for dx in -1isize..=1 {
@@ -177,5 +176,22 @@ impl Board {
                 cell.flagged = !cell.flagged;
             }
         }
+    }
+
+    pub fn has_win(&self) -> bool {
+        let count_hidden = self
+            .cells
+            .iter()
+            .filter(|cell| cell.state == CellState::Hidden)
+            .count();
+
+        count_hidden == self.mine_count
+    }
+
+    pub fn has_lose(&self) -> bool {
+        self.cells
+            .iter()
+            .find(|&cell| cell.mined && cell.state != CellState::Hidden)
+            .is_some()
     }
 }

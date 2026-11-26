@@ -1,5 +1,5 @@
 use macroquad::{
-    color::{BLACK, LIGHTGRAY, RED, SKYBLUE, WHITE},
+    color::{BLACK, GREEN, LIGHTGRAY, RED, SKYBLUE, WHITE},
     input::mouse_position,
     math::Rect,
     shapes::{draw_rectangle, draw_rectangle_lines},
@@ -10,6 +10,9 @@ use crate::board::{Board, Cell, CellState};
 
 pub const CELL_SIZE: f32 = 32.0;
 pub const MARGIN: f32 = 8.0;
+
+pub const WINDOW_HEIGHT: f32 = CELL_SIZE * 9.0 + MARGIN * 2.0;
+pub const WINDOW_WIDTH: f32 = CELL_SIZE * 9.0 + MARGIN * 2.0;
 
 fn center_text(x: f32, y: f32) -> (f32, f32) {
     (x + 6.0, y + CELL_SIZE - 6.0)
@@ -88,4 +91,24 @@ pub fn draw_board(board: &Board, font: &Font) {
 pub fn clicked_cell() -> Option<(usize, usize)> {
     let (mx, my) = mouse_position();
     to_grid(mx, my)
+}
+
+pub fn draw_win() {
+    draw_text(
+        "You win !",
+        WINDOW_WIDTH / 2.0,
+        WINDOW_HEIGHT / 2.0,
+        32.0,
+        GREEN,
+    );
+}
+
+pub fn draw_lose() {
+    draw_text(
+        "You lose !",
+        WINDOW_WIDTH / 2.0,
+        WINDOW_HEIGHT / 2.0,
+        32.0,
+        RED,
+    );
 }

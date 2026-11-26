@@ -3,7 +3,7 @@ use std::default::Default;
 
 use crate::{
     board::Board,
-    view::{CELL_SIZE, MARGIN, clicked_cell, draw_board},
+    view::{WINDOW_HEIGHT, WINDOW_WIDTH, clicked_cell, draw_board, draw_lose, draw_win},
 };
 
 mod board;
@@ -11,7 +11,7 @@ mod view;
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let mut board = Board::new(9, 9, 3);
+    let mut board = Board::new(9, 9, 9);
     board.generate_cells();
 
     let font = load_ttf_font("assets/NotoColorEmoji-Regular.ttf")
@@ -31,6 +31,12 @@ async fn main() {
 
         draw_board(&board, &font);
 
+        if board.has_win() {
+            draw_win();
+        } else if board.has_lose() {
+            draw_lose();
+        }
+
         next_frame().await
     }
 }
@@ -38,8 +44,8 @@ async fn main() {
 fn window_conf() -> Conf {
     Conf {
         window_title: "Rustsweeper".to_owned(),
-        window_height: CELL_SIZE as i32 * 9 + MARGIN as i32 * 2,
-        window_width: CELL_SIZE as i32 * 9 + MARGIN as i32 * 2,
+        window_height: WINDOW_HEIGHT as i32,
+        window_width: WINDOW_WIDTH as i32,
         ..Default::default()
     }
 }
